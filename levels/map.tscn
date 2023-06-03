@@ -1,0 +1,87 @@
+[gd_scene load_steps=4 format=3 uid="uid://7a1moh4hxt17"]
+
+[ext_resource type="Script" path="res://levels/map.gd" id="1_0wkpg"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lfww3"]
+noise_type = 0
+seed = 16
+frequency = 0.006
+fractal_weighted_strength = 0.8
+
+[sub_resource type="ImageTexture" id="ImageTexture_ht4rw"]
+
+[node name="Map" type="Node2D"]
+script = ExtResource("1_0wkpg")
+noise = SubResource("FastNoiseLite_lfww3")
+debug = true
+
+[node name="FG" type="Sprite2D" parent="."]
+texture = SubResource("ImageTexture_ht4rw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 23.0
+offset_top = 23.0
+offset_right = 63.0
+offset_bottom = 63.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 2
+offset_right = 239.0
+offset_bottom = 136.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="SeedLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Seed:      "
+
+[node name="SeedLineEdit" type="LineEdit" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="OctavesLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Octaves:"
+
+[node name="OctavesLineEdit" type="LineEdit" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="FrequencyLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Frequency: "
+
+[node name="FrequencyLineEdit" type="LineEdit" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 10
+alignment = 1
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="WeightedFractalLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "WeightedFractal:"
+
+[node name="WeightedFractalLabelLineEdit" type="LineEdit" parent="CanvasLayer/Control/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 10
+alignment = 1
+
+[connection signal="property_list_changed" from="." to="." method="_on_property_list_changed"]
+[connection signal="text_changed" from="CanvasLayer/Control/VBoxContainer/HBoxContainer/SeedLineEdit" to="." method="_on_seed_line_edit_text_changed"]
+[connection signal="text_changed" from="CanvasLayer/Control/VBoxContainer/HBoxContainer2/OctavesLineEdit" to="." method="_on_octaves_line_edit_text_changed"]
+[connection signal="text_changed" from="CanvasLayer/Control/VBoxContainer/HBoxContainer3/FrequencyLineEdit" to="." method="_on_frequency_line_edit_text_changed"]
+[connection signal="text_changed" from="CanvasLayer/Control/VBoxContainer/HBoxContainer4/WeightedFractalLabelLineEdit" to="." method="_on_weighted_fractal_label_line_edit_text_changed"]
