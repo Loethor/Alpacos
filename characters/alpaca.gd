@@ -15,6 +15,7 @@ const FLIP_JUMP_VELOCITY_Y = -350
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var facing_direction: float = -1.0
+@onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 
 func _physics_process(delta):
 
@@ -61,6 +62,7 @@ func _physics_process(delta):
 		else:
 			velocity.x = 0
 
+	alpaco_sprite.flip_h = true if facing_direction == 1.0 else false
 	move_and_slide()
 
 func use():

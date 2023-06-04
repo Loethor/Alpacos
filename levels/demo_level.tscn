@@ -22,7 +22,6 @@ position = Vector2(15, 13)
 position = Vector2(305, 455)
 scale = Vector2(-1, 1.25227)
 mesh = SubResource("QuadMesh_s3gwa")
-metadata/_edit_group_ = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Floor"]
 
@@ -34,7 +33,6 @@ shape = SubResource("RectangleShape2D_vdy3o")
 [node name="Column" type="MeshInstance2D" parent="."]
 position = Vector2(-5, 228)
 mesh = SubResource("QuadMesh_8n2o4")
-metadata/_edit_group_ = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Column"]
 
@@ -44,7 +42,6 @@ shape = SubResource("RectangleShape2D_43esr")
 [node name="Column2" type="MeshInstance2D" parent="."]
 position = Vector2(614, 227)
 mesh = SubResource("QuadMesh_8n2o4")
-metadata/_edit_group_ = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Column2"]
 
