@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqgh5ggiisb7i"]
+[gd_scene load_steps=7 format=3 uid="uid://dqgh5ggiisb7i"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
 
@@ -8,6 +8,15 @@ height = 32.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ifpc"]
 radius = 7.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_7aq2a"]
+size = Vector2(5, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_a0a3a"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_cd2or"]
 
 [node name="Alpaca" type="CharacterBody2D"]
 floor_constant_speed = true
@@ -19,3 +28,18 @@ mesh = SubResource("CapsuleMesh_lwb0e")
 
 [node name="AlpacaCollider" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_6ifpc")
+
+[node name="AlpacaMouth" type="MeshInstance2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-5.125, -5)
+scale = Vector2(1.15, 1)
+mesh = SubResource("QuadMesh_7aq2a")
+
+[node name="AlpacaEye" type="MeshInstance2D" parent="."]
+position = Vector2(-4, -9)
+mesh = SubResource("SphereMesh_a0a3a")
+
+[node name="PupilsEye" type="MeshInstance2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(-5, -9)
+mesh = SubResource("SphereMesh_cd2or")
