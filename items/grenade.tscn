@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bhflo7kow7rck"]
+
+[ext_resource type="Script" path="res://items/grenade.gd" id="1_vob7k"]
+[ext_resource type="Texture2D" uid="uid://wtcsyq8l8bjm" path="res://item_grenade.png" id="2_qhr7u"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s060p"]
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wihmu"]
+radius = 4.3067
+
+[node name="Grenade" type="RigidBody2D"]
+position = Vector2(56, 41)
+physics_material_override = SubResource("PhysicsMaterial_s060p")
+script = ExtResource("1_vob7k")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-28, -18)
+scale = Vector2(0.0192155, 0.0192155)
+texture = ExtResource("2_qhr7u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-29.515, -16.3913)
+shape = SubResource("CircleShape2D_wihmu")
+
+[node name="ExplosionTimer" type="Timer" parent="."]
+wait_time = 1.268
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="ExplosionTimer" to="." method="_on_explosion_timer_timeout"]
