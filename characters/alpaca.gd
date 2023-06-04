@@ -1,45 +1,65 @@
 extends CharacterBody2D
 
 
-const SPEED = 100.0
-const JUMP_VELOCITY = -250.0
+const MOVEMENT_SPEED = 100.0
+const AIR_FRICTION = 1.0
+const FORWARD_JUMP_VELOCITY_X = 150.0
+const FORWARD_JUMP_VELOCITY_Y = -250.0
+
+const IN_PLACE_JUMP_VELOCITY_Y = -300
+
+const FLIP_JUMP_VELOCITY_X = 50
+const FLIP_JUMP_VELOCITY_Y = -350
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+var facing_direction: float = -1.0
 
 func _physics_process(delta):
-	# Add the gravity.
+
+	# Add the gravity and the air friction.
 	if not is_on_floor():
 		velocity.y += gravity * delta
+		velocity.x = move_toward(velocity.x, 0, AIR_FRICTION)
 
 	# Handle use.
 	if Input.is_action_just_pressed("use"):
 		use()
 
-	# Handle jump.
+	# Handle forward jump.
 	if Input.is_action_just_pressed("forward_jump") and is_on_floor():
-		velocity = Vector2.ZERO
+		velocity.y = FORWARD_JUMP_VELOCITY_Y
+		velocity.x = FORWARD_JUMP_VELOCITY_X if facing_direction == 1.0 else -FORWARD_JUMP_VELOCITY_X
 		move_and_slide()
-		velocity.y = JUMP_VELOCITY
-		velocity.x = JUMP_VELOCITY 
-		
+
+	# Handle in-place jump.
+	if Input.is_action_just_pressed("in_place_jump") and is_on_floor():
+		velocity.y = IN_PLACE_JUMP_VELOCITY_Y
+		move_and_slide()
+
+	# Handle flip jump.
+	if Input.is_action_just_pressed("flip_jump") and is_on_floor():
+		velocity.y = FLIP_JUMP_VELOCITY_Y
+		velocity.x = FLIP_JUMP_VELOCITY_X if facing_direction == -1.0 else -FLIP_JUMP_VELOCITY_X
+		move_and_slide()
+
 	# Handle inventory.
 	if Input.is_action_just_pressed("inventory") and is_on_floor():
 		open_inventory()
-		
+
 	# Handle menu.
 	if Input.is_action_just_pressed("menu"):
 		open_menu()
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction = Input.get_axis("left", "right")
 	if is_on_floor():
-		var direction = Input.get_axis("left", "right")
 		if direction:
-			velocity.x = direction * SPEED
+			velocity.x = direction * MOVEMENT_SPEED
+			facing_direction = direction
 		else:
-			velocity.x = move_toward(velocity.x, 0, SPEED)
+			velocity.x = 0
 
 	move_and_slide()
 
@@ -48,6 +68,6 @@ func use():
 
 func open_inventory():
 	print("Se abrió la wea de inventario")
-	
+
 func open_menu():
 	print("Se abrió la wea de menu")

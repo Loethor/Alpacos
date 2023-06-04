@@ -7,7 +7,8 @@ radius = 8.0
 height = 32.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ifpc"]
-radius = 7.0
+radius = 8.0
+height = 32.0
 
 [sub_resource type="QuadMesh" id="QuadMesh_7aq2a"]
 size = Vector2(5, 1)

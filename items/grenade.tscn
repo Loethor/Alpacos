@@ -9,17 +9,15 @@
 radius = 8.0
 
 [node name="Grenade" type="RigidBody2D"]
-position = Vector2(56, 41)
 physics_material_override = SubResource("PhysicsMaterial_s060p")
 script = ExtResource("1_vob7k")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-25.351, -22)
 scale = Vector2(0.0860927, 0.0860927)
 texture = ExtResource("1_a13m8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-29, -18)
+position = Vector2(-3, 4)
 shape = SubResource("CircleShape2D_wihmu")
 
 [node name="ExplosionTimer" type="Timer" parent="."]

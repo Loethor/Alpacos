@@ -32,8 +32,7 @@ scale = Vector2(1, -1)
 shape = SubResource("RectangleShape2D_vdy3o")
 
 [node name="Column" type="MeshInstance2D" parent="."]
-position = Vector2(133, 224)
-rotation = -0.760964
+position = Vector2(-5, 228)
 mesh = SubResource("QuadMesh_8n2o4")
 metadata/_edit_group_ = true
 
@@ -42,8 +41,18 @@ metadata/_edit_group_ = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Column/StaticBody2D"]
 shape = SubResource("RectangleShape2D_43esr")
 
+[node name="Column2" type="MeshInstance2D" parent="."]
+position = Vector2(614, 227)
+mesh = SubResource("QuadMesh_8n2o4")
+metadata/_edit_group_ = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Column2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Column2/StaticBody2D"]
+shape = SubResource("RectangleShape2D_43esr")
+
 [node name="Grenade" parent="." instance=ExtResource("1_qmr8n")]
-position = Vector2(30, 38)
+position = Vector2(439, 171)
 
 [node name="Alpaca" parent="." instance=ExtResource("2_kiasp")]
 position = Vector2(522, 418)
