@@ -10,7 +10,6 @@ bounce = 1.0
 radius = 4.3067
 
 [node name="Grenade" type="RigidBody2D"]
-position = Vector2(56, 41)
 physics_material_override = SubResource("PhysicsMaterial_s060p")
 script = ExtResource("1_vob7k")
 
