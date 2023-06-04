@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://g2nytkfr78y6"]
+
+[ext_resource type="PackedScene" uid="uid://bhflo7kow7rck" path="res://items/grenade.tscn" id="1_qmr8n"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_s3gwa"]
+size = Vector2(640, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdy3o"]
+size = Vector2(640, 20)
+
+[sub_resource type="QuadMesh" id="QuadMesh_8n2o4"]
+size = Vector2(20, 480)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_43esr"]
+size = Vector2(20, 480)
+
+[node name="DemoLevel" type="Node2D"]
+position = Vector2(15, 13)
+
+[node name="Floor" type="MeshInstance2D" parent="."]
+position = Vector2(305, 455)
+scale = Vector2(-1, 1.25227)
+mesh = SubResource("QuadMesh_s3gwa")
+metadata/_edit_group_ = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Floor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/StaticBody2D"]
+rotation = -3.14159
+scale = Vector2(1, -1)
+shape = SubResource("RectangleShape2D_vdy3o")
+
+[node name="Column" type="MeshInstance2D" parent="."]
+position = Vector2(133, 224)
+rotation = -0.760964
+mesh = SubResource("QuadMesh_8n2o4")
+metadata/_edit_group_ = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Column"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Column/StaticBody2D"]
+shape = SubResource("RectangleShape2D_43esr")
+
+[node name="Grenade" parent="." instance=ExtResource("1_qmr8n")]
+position = Vector2(30, 38)
