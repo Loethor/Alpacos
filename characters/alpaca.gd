@@ -10,14 +10,19 @@ const IN_PLACE_JUMP_VELOCITY_Y = -300
 
 const FLIP_JUMP_VELOCITY_X = 50
 const FLIP_JUMP_VELOCITY_Y = -350
+const AIM_SPRITE_DISTANCE = 50
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var facing_direction: float = -1.0
+
+@onready var pivot: Node2D = $Pivot
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 
 func _physics_process(delta):
+	pivot.get_child(0).position.x = AIM_SPRITE_DISTANCE if facing_direction == 1.0 else -AIM_SPRITE_DISTANCE
+
 
 	# Add the gravity and the air friction.
 	if not is_on_floor():
@@ -52,6 +57,20 @@ func _physics_process(delta):
 	# Handle menu.
 	if Input.is_action_just_pressed("menu"):
 		open_menu()
+
+	# Handle Aim.
+	var aim_direction = Input.get_axis("aim_down", "aim_up")
+	if is_on_floor():
+		# Aiming up.
+		var new_rotation = pivot.rotation_degrees
+
+		if aim_direction > 0:
+			new_rotation -= 1 * facing_direction
+		elif aim_direction < 0:
+			new_rotation += 1 * facing_direction
+
+		pivot.rotation_degrees = clamp(new_rotation, -90, 90)
+
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("left", "right")
