@@ -53,7 +53,7 @@ wait_time = 2.0
 one_shot = true
 autostart = true
 
-[node name="ExplosionAnimation" type="GPUParticles2D" parent="."]
+[node name="ExplosionParticles" type="GPUParticles2D" parent="."]
 position = Vector2(0.561234, 0.561234)
 emitting = false
 amount = 16
