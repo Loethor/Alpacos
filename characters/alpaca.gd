@@ -19,17 +19,11 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
 
-@onready var selected_weapon: Node2D = $SelectedWeapon
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
-@onready var grenade_scene:PackedScene = preload("res://items/grenade.tscn")
 
-func _ready() -> void:
-
-	selected_weapon.add_child()
 
 func _physics_process(delta):
-
 
 	# Add the gravity and the air friction.
 	if not is_on_floor():
