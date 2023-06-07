@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhflo7kow7rck"]
+[gd_scene load_steps=8 format=3 uid="uid://bhflo7kow7rck"]
 
 [ext_resource type="Script" path="res://items/grenade.gd" id="1_vob7k"]
 [ext_resource type="Texture2D" uid="uid://dwf16hp4e7oj" path="res://models/grenade/grenade.png" id="2_1p1q8"]
@@ -7,13 +7,41 @@
 bounce = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wihmu"]
-radius = 8.52398
+radius = 8.92575
+
+[sub_resource type="Gradient" id="Gradient_nmj8u"]
+offsets = PackedFloat32Array(0, 0.459259, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.762938, 0.277871, 0.138579, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jhlru"]
+gradient = SubResource("Gradient_nmj8u")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_hgd41"]
+particle_flag_disable_z = true
+direction = Vector3(0, 100, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 157.89
+initial_velocity_max = 273.68
+angular_velocity_min = 60.63
+angular_velocity_max = 60.63
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+linear_accel_min = -1.0
+damping_min = 24.21
+damping_max = 24.21
+scale_min = 10.0
+scale_max = 20.0
+color_ramp = SubResource("GradientTexture1D_jhlru")
+hue_variation_max = 0.2
+turbulence_enabled = true
+turbulence_noise_strength = 12.16
 
 [node name="Grenade" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_s060p")
 script = ExtResource("1_vob7k")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="GrenadeSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_1p1q8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -21,8 +49,16 @@ position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_wihmu")
 
 [node name="ExplosionTimer" type="Timer" parent="."]
-wait_time = 1.268
+wait_time = 2.0
 one_shot = true
 autostart = true
+
+[node name="ExplosionParticles" type="GPUParticles2D" parent="."]
+position = Vector2(0.561234, 0.561234)
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_hgd41")
+one_shot = true
+explosiveness = 1.0
 
 [connection signal="timeout" from="ExplosionTimer" to="." method="_on_explosion_timer_timeout"]
