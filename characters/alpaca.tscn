@@ -19,8 +19,9 @@ texture = ExtResource("2_436d7")
 position = Vector2(2, -1)
 shape = SubResource("CapsuleShape2D_6ifpc")
 
-[node name="Pivot" type="Node2D" parent="."]
+[node name="SelectedWeapon" type="Node2D" parent="."]
 
-[node name="AimSprite" type="Sprite2D" parent="Pivot"]
+[node name="AimSprite" type="Sprite2D" parent="."]
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_1mqt0")
+offset = Vector2(50, 0)
