@@ -19,7 +19,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
-var power:int = 0
+var power: int = 0
 
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
@@ -81,9 +81,6 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("inventory"):
 			open_inventory()
 
-
-
-
 		# Handle Aim.
 		aim_sprite.offset.x = AIM_SPRITE_DISTANCE if facing_direction == DIRECTION.RIGHT else -AIM_SPRITE_DISTANCE
 		var aim_direction = Input.get_axis("aim_down", "aim_up")
@@ -94,9 +91,7 @@ func _physics_process(delta):
 				new_rotation -= aim_direction
 			DIRECTION.LEFT:
 				new_rotation += aim_direction
-
 		aim_sprite.rotation_degrees = clamp(new_rotation, -90, 90)
-
 
 	# Handle menu.
 	if Input.is_action_just_pressed("menu"):
@@ -115,25 +110,24 @@ func _physics_process(delta):
 		use(power)
 		power = 0
 
-
 	move_and_slide()
 
 # this works temporary and only for grenade
 # TODO make this work for any kind of weapon
-func use(throw_power):
+func use(throw_power: int) -> void:
 
 	# Selected weapon scene
-	var grenade_scene:PackedScene = preload("res://items/grenade.tscn")
-	var grenade_instance = grenade_scene.instantiate()
+	var grenade_scene: PackedScene = preload("res://items/grenade.tscn")
+	var grenade_instance := grenade_scene.instantiate()
 
 	# make it not collide initially with the parent
 	grenade_instance.add_collision_exception_with(self)
 
 	# throw angle
-	var angle = aim_sprite.rotation
+	var angle: float = aim_sprite.rotation
 
 	# because of dirty angle hack, we have to manage directions here too
-	var throw_direction = Vector2.ZERO
+	var throw_direction: Vector2 = Vector2.ZERO
 	if facing_direction == DIRECTION.RIGHT:
 		throw_direction = throw_power * Vector2(cos(angle), sin(angle))
 	else:
