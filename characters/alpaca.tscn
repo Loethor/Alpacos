@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqgh5ggiisb7i"]
+[gd_scene load_steps=5 format=3 uid="uid://by7ofkro6dh7f"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
 [ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://models/alpaco/pixelALPACO.png" id="2_436d7"]

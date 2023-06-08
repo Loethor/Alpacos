@@ -4,6 +4,7 @@ enum DIRECTION {LEFT, RIGHT}
 
 const MOVEMENT_SPEED = 100.0
 const AIR_FRICTION = 1.0
+
 const FORWARD_JUMP_VELOCITY_X = 150.0
 const FORWARD_JUMP_VELOCITY_Y = -250.0
 
@@ -33,29 +34,7 @@ func _physics_process(delta):
 	# All the actions that can be performed on the exclusively on the floor
 	if is_on_floor():
 
-		# Handle forward jump.
-		if Input.is_action_just_pressed("forward_jump"):
-			velocity.y = FORWARD_JUMP_VELOCITY_Y
-			velocity.x = FORWARD_JUMP_VELOCITY_X if facing_direction == DIRECTION.RIGHT else -FORWARD_JUMP_VELOCITY_X
-			move_and_slide()
-
-		# Handle in-place jump.
-		if Input.is_action_just_pressed("in_place_jump"):
-			velocity.y = IN_PLACE_JUMP_VELOCITY_Y
-			move_and_slide()
-
-		# Handle flip jump.
-		if Input.is_action_just_pressed("flip_jump"):
-			velocity.y = FLIP_JUMP_VELOCITY_Y
-			velocity.x = FLIP_JUMP_VELOCITY_X if facing_direction == DIRECTION.RIGHT else -FLIP_JUMP_VELOCITY_X
-			move_and_slide()
-
-		# Handle inventory.
-		if Input.is_action_just_pressed("inventory"):
-			open_inventory()
-
 		# Get the input direction and handle the movement/deceleration.
-
 		var direction = Input.get_axis("left", "right")
 		if direction:
 			# Store previous facing direction
@@ -77,6 +56,31 @@ func _physics_process(delta):
 		else:
 			# no input, velocity set to 0
 			velocity.x = 0
+
+
+		# Handle forward jump.
+		if Input.is_action_just_pressed("forward_jump"):
+			velocity.y = FORWARD_JUMP_VELOCITY_Y
+			velocity.x = FORWARD_JUMP_VELOCITY_X if facing_direction == DIRECTION.RIGHT else -FORWARD_JUMP_VELOCITY_X
+			move_and_slide()
+
+		# Handle in-place jump.
+		if Input.is_action_just_pressed("in_place_jump"):
+			velocity.y = IN_PLACE_JUMP_VELOCITY_Y
+			move_and_slide()
+
+		# Handle flip jump.
+		if Input.is_action_just_pressed("flip_jump"):
+			velocity.y = FLIP_JUMP_VELOCITY_Y
+			velocity.x = FLIP_JUMP_VELOCITY_X if facing_direction == DIRECTION.LEFT else -FLIP_JUMP_VELOCITY_X
+			move_and_slide()
+
+		# Handle inventory.
+		if Input.is_action_just_pressed("inventory"):
+			open_inventory()
+
+
+
 
 		# Handle Aim.
 		aim_sprite.offset.x = AIM_SPRITE_DISTANCE if facing_direction == DIRECTION.RIGHT else -AIM_SPRITE_DISTANCE
