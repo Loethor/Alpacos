@@ -66,6 +66,7 @@ func _physics_process(delta):
 
 		# Handle in-place jump.
 		if Input.is_action_just_pressed("in_place_jump"):
+			velocity.x = 0
 			velocity.y = IN_PLACE_JUMP_VELOCITY_Y
 			move_and_slide()
 
