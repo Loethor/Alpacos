@@ -15,4 +15,6 @@ func explode() -> void:
 func _on_explosion_timer_timeout() ->void:
 	explode()
 
+func throw(imp:Vector2):
+	apply_impulse(imp)
 

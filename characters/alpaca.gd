@@ -19,6 +19,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
+var power:int = 0
 
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
@@ -101,15 +102,50 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("menu"):
 		open_menu()
 
-	# Handle use.
-	if Input.is_action_just_pressed("use"):
-		use()
+	# TODO this is a temporal solution
+	# in the future depending on the weapong we don't want this behavior
+	# e.g., shotgun should just "shoot" and not hold and release
+	# Holding  use.
+	if Input.is_action_pressed("use"):
+		if power < 1000:
+			power += 50
+
+	# Releasing use.
+	if Input.is_action_just_released("use"):
+		use(power)
+		power = 0
 
 
 	move_and_slide()
 
-func use():
-	print("Used la wea")
+# this works temporary and only for grenade
+# TODO make this work for any kind of weapon
+func use(throw_power):
+
+	# Selected weapon scene
+	var grenade_scene:PackedScene = preload("res://items/grenade.tscn")
+	var grenade_instance = grenade_scene.instantiate()
+
+	# make it not collide initially with the parent
+	grenade_instance.add_collision_exception_with(self)
+
+	# throw angle
+	var angle = aim_sprite.rotation
+
+	# because of dirty angle hack, we have to manage directions here too
+	var throw_direction = Vector2.ZERO
+	if facing_direction == DIRECTION.RIGHT:
+		throw_direction = throw_power * Vector2(cos(angle), sin(angle))
+	else:
+		throw_direction = throw_power * Vector2(-cos(angle), -sin(angle))
+
+	# throw the grenade
+	grenade_instance.throw(throw_direction)
+	add_child(grenade_instance)
+
+	# give back the colision with parent after 0.25 secs
+	await get_tree().create_timer(0.25).timeout
+	grenade_instance.remove_collision_exception_with(self)
 
 func open_inventory():
 	print("Se abrió la wea de inventario")
