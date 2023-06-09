@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpge0qlhynpxh"
-path="res://.godot/imported/wind_bg.png-1882dbd4a4dec89472bdee257de3089b.ctex"
+uid="uid://nmbne0x4v06m"
+path="res://.godot/imported/wind_left_overt.png-a3fee7d9f0e85b82fa0032c1c216bc36.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://models/wind/wind_bg.png"
-dest_files=["res://.godot/imported/wind_bg.png-1882dbd4a4dec89472bdee257de3089b.ctex"]
+source_file="res://assets/models/wind/wind_left_overt.png"
+dest_files=["res://.godot/imported/wind_left_overt.png-a3fee7d9f0e85b82fa0032c1c216bc36.ctex"]
 
 [params]
 
