@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwf16hp4e7oj"
-path="res://.godot/imported/grenade.png-e2244b1e186048ee8c6e19a16cb9256f.ctex"
+uid="uid://dlhe73sm04vww"
+path="res://.godot/imported/pixelALPACO.png-926e4ccc85b89d58c8079264721837f7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://models/grenade/grenade.png"
-dest_files=["res://.godot/imported/grenade.png-e2244b1e186048ee8c6e19a16cb9256f.ctex"]
+source_file="res://assets/models/alpaco/pixelALPACO.png"
+dest_files=["res://.godot/imported/pixelALPACO.png-926e4ccc85b89d58c8079264721837f7.ctex"]
 
 [params]
 

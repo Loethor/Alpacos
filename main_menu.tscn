@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://dvmhpfmjettpl"]
+[gd_scene load_steps=2 format=3 uid="uid://un6n4ae4d57"]
 
-[ext_resource type="Theme" path="res://assets/themes/alpaco_theme.tres" id="1_pcrcx"]
+[ext_resource type="Theme" uid="uid://crqrod4xxs28d" path="res://assets/themes/alpaco_theme.tres" id="1_pcrcx"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
