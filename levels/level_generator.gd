@@ -34,7 +34,7 @@ func _ready() -> void:
 
 func _generate_map():
 	# TODO: select from a list of background images
-	var image:Image = load("res://models/background/queixo.png")
+	var image:Image = load("res://assets/models/background/queixo.png")
 
 	# We need that sweet transparent alpha
 	image.convert(Image.FORMAT_RGBA8)

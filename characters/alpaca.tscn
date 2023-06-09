@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dqgh5ggiisb7i"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
-[ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://models/alpaco/pixelALPACO.png" id="2_436d7"]
+[ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://assets/models/alpaco/pixelALPACO.png" id="2_436d7"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ifpc"]
 radius = 13.0
