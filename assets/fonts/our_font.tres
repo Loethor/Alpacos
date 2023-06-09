@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" load_steps=2 format=3 uid="uid://da7hk2ps37uxm"]
+
+[ext_resource type="FontFile" uid="uid://bi85s0iwjmd6j" path="res://assets/fonts/SleepyBook.ttf" id="1_j6go8"]
+
+[resource]
+base_font = ExtResource("1_j6go8")
