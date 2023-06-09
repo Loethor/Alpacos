@@ -2,7 +2,7 @@ extends Node2D
 
 #@export var noise:FastNoiseLite
 @export var debug:bool = false
-@export var offset_scale:float = 0
+@export var offset_scale:float = -0.2
 @export var height_scale:float = .5
 
 @onready var foreground_sprite:Sprite2D = $ForegroundSprite

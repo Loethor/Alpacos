@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bhflo7kow7rck"]
 
 [ext_resource type="Script" path="res://items/grenade.gd" id="1_vob7k"]
-[ext_resource type="Texture2D" uid="uid://dwf16hp4e7oj" path="res://assets/models/grenade/grenade.png" id="2_1p1q8"]
+[ext_resource type="Texture2D" uid="uid://dwf16hp4e7oj" path="res://assets/models/grenade/grenade.png" id="2_u7eip"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s060p"]
 bounce = 1.0
@@ -42,7 +42,7 @@ physics_material_override = SubResource("PhysicsMaterial_s060p")
 script = ExtResource("1_vob7k")
 
 [node name="GrenadeSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_1p1q8")
+texture = ExtResource("2_u7eip")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
