@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://i3fitbnq4tgd"]
+
+[ext_resource type="Script" path="res://ui/ui.gd" id="1_d5143"]
+[ext_resource type="Texture2D" uid="uid://dm3xdc181o30b" path="res://assets/models/wind/wind_left_bg.png" id="1_i6kb1"]
+[ext_resource type="Texture2D" uid="uid://nmbne0x4v06m" path="res://assets/models/wind/wind_left_overt.png" id="2_docut"]
+[ext_resource type="Texture2D" uid="uid://cqf7ci6v5mudk" path="res://assets/models/wind/wind_left_progress.png" id="3_0r2le"]
+[ext_resource type="Texture2D" uid="uid://0hhguja0ol02" path="res://assets/models/wind/wind_right_bg.png" id="4_egxxu"]
+[ext_resource type="Texture2D" uid="uid://bgpx1b7cmtgrv" path="res://assets/models/wind/wind_right_over.png" id="5_u4qvu"]
+[ext_resource type="Texture2D" uid="uid://ck3jid6oc5bpy" path="res://assets/models/wind/wind_right_progress.png" id="6_vxy2s"]
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_d5143")
+
+[node name="WindLeftBar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 434.0
+offset_right = 81.0
+offset_bottom = 466.0
+max_value = 2.0
+value = 2.0
+fill_mode = 1
+nine_patch_stretch = true
+texture_under = ExtResource("1_i6kb1")
+texture_over = ExtResource("2_docut")
+texture_progress = ExtResource("3_0r2le")
+
+[node name="WindRightBar" type="TextureProgressBar" parent="."]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 434.0
+offset_right = 144.0
+offset_bottom = 466.0
+max_value = 2.0
+value = 1.0
+nine_patch_stretch = true
+texture_under = ExtResource("4_egxxu")
+texture_over = ExtResource("5_u4qvu")
+texture_progress = ExtResource("6_vxy2s")
