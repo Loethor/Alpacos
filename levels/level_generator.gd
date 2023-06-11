@@ -21,7 +21,6 @@ extends Node2D
 var line := []
 var noise:FastNoiseLite = FastNoiseLite.new()
 
-
 func _ready() -> void:
 	randomize()
 	_init_noise()
@@ -36,18 +35,21 @@ func _generate_map():
 	# TODO: select from a list of background images
 	var image:Image = load("res://assets/models/background/queixo.png")
 
-	# We need that sweet transparent alpha
+#	# We need that sweet transparent alpha
 	image.convert(Image.FORMAT_RGBA8)
+
+	## resizing if needed
+#	foreground_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+#	image.resize(1920,1080)
 
 	# Obtain image dimensions
 	var width: int  = image.get_size().x
 	var height: int = image.get_size().y
 
+
 	# number of pixels to add in the bottom
 	var offset = height * offset_scale
 
-	# Loethor fuckery
-	var polygon: PackedVector2Array = PackedVector2Array()
 
 	# i is the position of a pixel in the x dimension
 	for i in range(0, width):
@@ -60,17 +62,13 @@ func _generate_map():
 
 		# used for collision
 		line.append(noise_height)
-		polygon.append(Vector2(i, noise_height))
+#		polygon.append(Vector2(i, noise_height))
 
 		# from 0 (top) until the noise_height set all to transparent
 		for j in range(0, noise_height):
 			image.set_pixel(i,j, Color.TRANSPARENT)
 
-	# add collision
-	# just don't ask, but it works
-	polygon.append(Vector2(width,height))
-	polygon.append(Vector2(0,height))
-	$StaticBody2D/CollisionPolygon2D.polygon = polygon
+	create_collision_based_on_image(image)
 
 	# Move it to the center
 	foreground_sprite.position = Vector2(width/2.0, height/2.0)
@@ -87,6 +85,25 @@ func _init_noise():
 	noise.frequency = 0.005
 	noise.fractal_weighted_strength  = 0.8
 
+
+func create_collision_based_on_image(im: Image) -> void:
+	var polygon: PackedVector2Array = _obtain_collision_polygon(im)
+	$StaticBody2D/CollisionPolygon2D.polygon = polygon
+
+func _obtain_collision_polygon(im: Image) -> PackedVector2Array:
+	var bitmap_level: BitMap = BitMap.new()
+	bitmap_level.create_from_image_alpha(im)
+	print(bitmap_level)
+
+	var polygons: Array[PackedVector2Array] = bitmap_level.opaque_to_polygons(
+		Rect2(
+			Vector2.ZERO,
+			im.get_size()
+		),
+		2.0 # a lower epsilon corresponds to more points in the polygons.
+	)
+	# Polygons in an Array but we only need the first element
+	return polygons[0]
 
 # TODO: manage explosions
 
