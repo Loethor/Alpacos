@@ -26,12 +26,18 @@ func _ready() -> void:
 	randomize()
 	_init_noise()
 	_generate_map()
-	SignalBus.has_exploded.connect(destroy_terrain)
+	SignalBus.has_exploded.connect(explode_on_terrain)
 
 	# Show UI in debug mode
 	if debug:
 		$Control.show()
 		_init_ui()
+
+func _init_noise():
+	noise.seed = randi()
+	noise.fractal_octaves  = 2
+	noise.frequency = 0.005
+	noise.fractal_weighted_strength  = 0.8
 
 func _generate_map():
 	# TODO: select from a list of background images
@@ -40,7 +46,7 @@ func _generate_map():
 #	# We need that sweet transparent alpha
 	image.convert(Image.FORMAT_RGBA8)
 
-	## resizing if needed
+#	# resizing if needed
 #	foreground_sprite.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
 #	image.resize(1920,1080)
 
@@ -81,17 +87,12 @@ func obtain_normaliced_noise(x_position:int) -> float:
 	# returns it in a range from [0 to 1]
 	return (noise.get_noise_1d(x_position) + 1)/2
 
-func _init_noise():
-	noise.seed = randi()
-	noise.fractal_octaves  = 2
-	noise.frequency = 0.005
-	noise.fractal_weighted_strength  = 0.8
-
-
 func create_collision_based_on_image(im: Image) -> void:
 	var polygons: Array[PackedVector2Array] = _obtain_collision_polygon(im)
 	print(polygons.size())
 
+	# if the terrain is divided in multiple pieces, we need a collision
+	# for each piece, and a polygon for each collider
 	_delete_old_colliders()
 	_create_new_colliders(polygons)
 
@@ -99,7 +100,6 @@ func create_collision_based_on_image(im: Image) -> void:
 		var new_collider := CollisionPolygon2D.new()
 		new_collider.polygon = polygons[i]
 		$StaticBody2D.add_child(new_collider)
-
 
 func _obtain_collision_polygon(im: Image) -> Array[PackedVector2Array]:
 	var bitmap_level: BitMap = BitMap.new()
@@ -113,7 +113,6 @@ func _obtain_collision_polygon(im: Image) -> Array[PackedVector2Array]:
 		),
 		2.0 # a lower epsilon corresponds to more points in the polygons.
 	)
-	# Polygons in an Array but we only need the first element
 	return polygons
 
 func _delete_old_colliders() -> void:
@@ -126,26 +125,42 @@ func _create_new_colliders(pols: Array[PackedVector2Array]) -> void:
 		new_collider.polygon = pols[i]
 		$StaticBody2D.add_child(new_collider)
 
-func destroy_terrain(where: Vector2, explosion_radius: int) -> void:
-	var image_size:= image.get_size()
-	if where.x > image_size.x + explosion_radius  or \
-	   where.x < 0 - explosion_radius or \
-	   where.y > image_size.y + explosion_radius or \
-	   where.y< 0 - explosion_radius:
+func explode_on_terrain(at_position: Vector2, explosion_radius: int) -> void:
+	# If the image has dimensions image_size
+	# and a halo surroding it of size explosion_radius
+	# We only calculate the explosion of terrain if
+	# the location is inside of that rectangle of size
+	# 2 * explosion_radius + image_size.x
+	#                  *
+	# 2 * explosion_radius + image_size.y
+	#
+	# ************halo************
+	# *//////////image///////////*
+	# *//////////image///////////*
+	# *//////////image///////////*
+	# ************halo************
+
+	var image_rect = image.get_used_rect()
+	image_rect.grow(explosion_radius)
+	if !image_rect.has_point(at_position):
 		return
 
-	var limit_x_max = min(where.x + explosion_radius, image_size.x)
-	var limit_x_min = max(where.x - explosion_radius, 0)
-	var limit_y_max = min(where.y + explosion_radius, image_size.y)
-	var limit_y_min = max(where.y - explosion_radius, 0)
+	var image_size: Vector2i = image.get_size()
+
+	var limit_x_min = max(at_position.x - explosion_radius, 0)
+	var limit_x_max = min(at_position.x + explosion_radius, image_size.x)
+	var limit_y_min = max(at_position.y - explosion_radius, 0)
+	var limit_y_max = min(at_position.y + explosion_radius, image_size.y)
+
 	for i in range(limit_x_min, limit_x_max):
 		for j in range(limit_y_min, limit_y_max):
-			var radius = (where.x - i) * (where.x - i) + (where.y - j) * (where.y - j)
+			var radius = (at_position.x - i) * (at_position.x - i) + (at_position.y - j) * (at_position.y - j)
 			if radius < explosion_radius * explosion_radius:
 				image.set_pixel(i,j, Color.TRANSPARENT)
-	print("Exploded at %s with a radius of %s" % [where, explosion_radius])
-	foreground_sprite.position = Vector2(image_size.x/2.0, image_size.y/2.0)
-	foreground_sprite.texture = ImageTexture.create_from_image(image)
+
+	# updating the texture in the sprite (faster then creating it from zero!)
+	foreground_sprite.texture.update(image)
+	# updating the collisions
 	create_collision_based_on_image(image)
 
 

@@ -10,8 +10,8 @@ const FORWARD_JUMP_VELOCITY_Y = -250.0
 
 const IN_PLACE_JUMP_VELOCITY_Y = -300
 
-const FLIP_JUMP_VELOCITY_X = 50
-const FLIP_JUMP_VELOCITY_Y = -350
+const FLIP_JUMP_VELOCITY_X = 80
+const FLIP_JUMP_VELOCITY_Y = -400
 const AIM_SPRITE_DISTANCE = 50
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -23,6 +23,15 @@ var power: int = 0
 
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
+
+func _ready() -> void:
+
+	# Not sliding
+	floor_stop_on_slope = true
+	# Can walk slopes up to 85 deg
+	floor_max_angle = deg_to_rad(85)
+	# Same speed going up and down
+	floor_constant_speed = true
 
 
 func _physics_process(delta):
