@@ -2,8 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://dub6inclj0qlq" path="res://levels/level_generator.tscn" id="1_0aq48"]
 [ext_resource type="PackedScene" uid="uid://dqgh5ggiisb7i" path="res://characters/alpaca.tscn" id="2_y2wg0"]
+
 [ext_resource type="PackedScene" uid="uid://bhflo7kow7rck" path="res://items/grenade.tscn" id="3_g2gom"]
 [ext_resource type="Script" path="res://Camera2D.gd" id="4_fk0mo"]
+
+
 
 [node name="Game" type="Node2D"]
 
@@ -11,6 +14,7 @@
 
 [node name="Alpaca" parent="." instance=ExtResource("2_y2wg0")]
 position = Vector2(176, 14)
+
 
 [node name="Grenade" parent="." instance=ExtResource("3_g2gom")]
 position = Vector2(273, 18)
@@ -20,3 +24,8 @@ position = Vector2(176, 14)
 limit_smoothed = true
 position_smoothing_enabled = true
 script = ExtResource("4_fk0mo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("3_ewwyn")]
+

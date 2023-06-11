@@ -2,7 +2,7 @@ extends Node2D
 
 #@export var noise:FastNoiseLite
 @export var debug:bool = false
-@export var offset_scale:float = 0
+@export var offset_scale:float = -0.2
 @export var height_scale:float = .5
 
 @onready var foreground_sprite:Sprite2D = $ForegroundSprite
@@ -34,7 +34,7 @@ func _ready() -> void:
 
 func _generate_map():
 	# TODO: select from a list of background images
-	var image:Image = load("res://models/background/queixo.png")
+	var image:Image = load("res://assets/models/background/queixo.png")
 
 	# We need that sweet transparent alpha
 	image.convert(Image.FORMAT_RGBA8)

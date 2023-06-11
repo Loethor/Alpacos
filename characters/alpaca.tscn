@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dqgh5ggiisb7i"]
+[gd_scene load_steps=5 format=3 uid="uid://dqgh5ggiisb7i"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
-[ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://models/alpaco/pixelALPACO.png" id="2_436d7"]
+[ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://assets/models/alpaco/pixelALPACO.png" id="2_gxxui"]
+[ext_resource type="Texture2D" uid="uid://bsu37uir6uqpq" path="res://assets/models/aim/aim.png" id="3_p2no3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ifpc"]
 radius = 13.0
@@ -12,8 +13,13 @@ floor_constant_speed = true
 script = ExtResource("1_sbrnt")
 
 [node name="AlpacoSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_436d7")
+texture = ExtResource("2_gxxui")
 
 [node name="AlpacaCollider" type="CollisionShape2D" parent="."]
 position = Vector2(2, -1)
 shape = SubResource("CapsuleShape2D_6ifpc")
+
+[node name="AimSprite" type="Sprite2D" parent="."]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_p2no3")
+offset = Vector2(50, 0)

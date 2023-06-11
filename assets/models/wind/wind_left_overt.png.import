@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwf16hp4e7oj"
-path="res://.godot/imported/grenade.png-e2244b1e186048ee8c6e19a16cb9256f.ctex"
+uid="uid://nmbne0x4v06m"
+path="res://.godot/imported/wind_left_overt.png-a3fee7d9f0e85b82fa0032c1c216bc36.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://models/grenade/grenade.png"
-dest_files=["res://.godot/imported/grenade.png-e2244b1e186048ee8c6e19a16cb9256f.ctex"]
+source_file="res://assets/models/wind/wind_left_overt.png"
+dest_files=["res://.godot/imported/wind_left_overt.png-a3fee7d9f0e85b82fa0032c1c216bc36.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dlhe73sm04vww"
-path="res://.godot/imported/pixelALPACO.png-bb0aefb591d684196a570437ab7fe4a4.ctex"
+uid="uid://bsu37uir6uqpq"
+path="res://.godot/imported/aim.png-337a7e072e5b83ef0856082a8549b846.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://models/alpaco/pixelALPACO.png"
-dest_files=["res://.godot/imported/pixelALPACO.png-bb0aefb591d684196a570437ab7fe4a4.ctex"]
+source_file="res://assets/models/aim/aim.png"
+dest_files=["res://.godot/imported/aim.png-337a7e072e5b83ef0856082a8549b846.ctex"]
 
 [params]
 
