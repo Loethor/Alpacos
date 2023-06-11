@@ -25,7 +25,4 @@ limit_smoothed = true
 position_smoothing_enabled = true
 script = ExtResource("4_fk0mo")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="UI" parent="CanvasLayer" instance=ExtResource("3_ewwyn")]
 
