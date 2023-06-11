@@ -134,8 +134,9 @@ func use(throw_power: int) -> void:
 		throw_direction = throw_power * Vector2(-cos(angle), -sin(angle))
 
 	# throw the grenade
+	grenade_instance.position = self.position
 	grenade_instance.throw(throw_direction)
-	add_child(grenade_instance)
+	$"/root/Game".add_child(grenade_instance)
 
 	# give back the colision with parent after 0.25 secs
 	await get_tree().create_timer(0.25).timeout

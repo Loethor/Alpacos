@@ -20,11 +20,13 @@ extends Node2D
 
 var line := []
 var noise:FastNoiseLite = FastNoiseLite.new()
+var image: Image
 
 func _ready() -> void:
 	randomize()
 	_init_noise()
 	_generate_map()
+	SignalBus.has_exploded.connect(destroy_terrain)
 
 	# Show UI in debug mode
 	if debug:
@@ -33,7 +35,7 @@ func _ready() -> void:
 
 func _generate_map():
 	# TODO: select from a list of background images
-	var image:Image = load("res://assets/models/background/queixo.png")
+	image = load("res://assets/models/background/queixo.png")
 
 #	# We need that sweet transparent alpha
 	image.convert(Image.FORMAT_RGBA8)
@@ -87,10 +89,19 @@ func _init_noise():
 
 
 func create_collision_based_on_image(im: Image) -> void:
-	var polygon: PackedVector2Array = _obtain_collision_polygon(im)
-	$StaticBody2D/CollisionPolygon2D.polygon = polygon
+	var polygons: Array[PackedVector2Array] = _obtain_collision_polygon(im)
+	print(polygons.size())
 
-func _obtain_collision_polygon(im: Image) -> PackedVector2Array:
+	_delete_old_colliders()
+	_create_new_colliders(polygons)
+
+	for i in range(0,polygons.size()):
+		var new_collider := CollisionPolygon2D.new()
+		new_collider.polygon = polygons[i]
+		$StaticBody2D.add_child(new_collider)
+
+
+func _obtain_collision_polygon(im: Image) -> Array[PackedVector2Array]:
 	var bitmap_level: BitMap = BitMap.new()
 	bitmap_level.create_from_image_alpha(im)
 	print(bitmap_level)
@@ -103,10 +114,39 @@ func _obtain_collision_polygon(im: Image) -> PackedVector2Array:
 		2.0 # a lower epsilon corresponds to more points in the polygons.
 	)
 	# Polygons in an Array but we only need the first element
-	return polygons[0]
+	return polygons
 
-# TODO: manage explosions
+func _delete_old_colliders() -> void:
+	for i in range($StaticBody2D.get_child_count()):
+		$StaticBody2D.get_child(i).queue_free()
 
+func _create_new_colliders(pols: Array[PackedVector2Array]) -> void:
+	for i in range(0,pols.size()):
+		var new_collider := CollisionPolygon2D.new()
+		new_collider.polygon = pols[i]
+		$StaticBody2D.add_child(new_collider)
+
+func destroy_terrain(where: Vector2, explosion_radius: int) -> void:
+	var image_size:= image.get_size()
+	if where.x > image_size.x + explosion_radius  or \
+	   where.x < 0 - explosion_radius or \
+	   where.y > image_size.y + explosion_radius or \
+	   where.y< 0 - explosion_radius:
+		return
+
+	var limit_x_max = min(where.x + explosion_radius, image_size.x)
+	var limit_x_min = max(where.x - explosion_radius, 0)
+	var limit_y_max = min(where.y + explosion_radius, image_size.y)
+	var limit_y_min = max(where.y - explosion_radius, 0)
+	for i in range(limit_x_min, limit_x_max):
+		for j in range(limit_y_min, limit_y_max):
+			var radius = (where.x - i) * (where.x - i) + (where.y - j) * (where.y - j)
+			if radius < explosion_radius * explosion_radius:
+				image.set_pixel(i,j, Color.TRANSPARENT)
+	print("Exploded at %s with a radius of %s" % [where, explosion_radius])
+	foreground_sprite.position = Vector2(image_size.x/2.0, image_size.y/2.0)
+	foreground_sprite.texture = ImageTexture.create_from_image(image)
+	create_collision_based_on_image(image)
 
 
 ######## DEBUG MODE ONLY #######

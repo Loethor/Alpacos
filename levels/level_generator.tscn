@@ -5,6 +5,8 @@
 [sub_resource type="ImageTexture" id="ImageTexture_dor47"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2s2b7"]
+friction = 0.6
+rough = true
 
 [node name="LevelGenerator" type="Node2D"]
 script = ExtResource("1_y02av")
@@ -14,9 +16,6 @@ texture = SubResource("ImageTexture_dor47")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 physics_material_override = SubResource("PhysicsMaterial_2s2b7")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
-polygon = PackedVector2Array(0, 0, 0, 0, 0, 0)
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -95,10 +94,6 @@ min_value = 1.0
 max_value = 4.0
 step = 1.0
 value = 1.0
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(317, 239)
-zoom = Vector2(0.2, 0.2)
 
 [connection signal="value_changed" from="Control/MarginContainer2/VBoxContainer2/SeedHS" to="." method="_on_seed_hs_value_changed"]
 [connection signal="value_changed" from="Control/MarginContainer2/VBoxContainer2/OffsetHS" to="." method="_on_offset_hs_value_changed"]
