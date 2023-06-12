@@ -18,6 +18,7 @@ config/icon="res://alpaco_icon.svg"
 [autoload]
 
 GameState="*res://game_state.gd"
+SignalBus="*res://signal_bus.gd"
 
 [display]
 
