@@ -1,10 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dqgh5ggiisb7i"]
+[gd_scene load_steps=12 format=3 uid="uid://dqgh5ggiisb7i"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
 [ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://assets/models/alpaco/pixelALPACO.png" id="2_gxxui"]
 [ext_resource type="Shader" path="res://assets/shaders/damage_or_heal.gdshader" id="2_w57ao"]
 [ext_resource type="Texture2D" uid="uid://bsu37uir6uqpq" path="res://assets/models/aim/aim.png" id="3_p2no3"]
-[ext_resource type="PackedScene" uid="uid://fmxcyodo1b8h" path="res://components/health_component.tscn" id="4_3j1eu"]
 [ext_resource type="Theme" uid="uid://crqrod4xxs28d" path="res://assets/themes/alpaco_theme.tres" id="5_2xhpv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6lley"]
@@ -15,22 +14,6 @@ shader_parameter/heal_opacity = 0.0
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ifpc"]
 radius = 13.0
 height = 50.0
-
-[sub_resource type="Animation" id="Animation_0x07v"]
-resource_name = "take_damage"
-length = 0.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AlpacoSprite:material:shader_parameter/hit_opacity")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [0.0, 1.0, 0.0]
-}
 
 [sub_resource type="Animation" id="Animation_ekia6"]
 length = 0.001
@@ -75,6 +58,22 @@ tracks/0/keys = {
 "values": [0.0, 1.0, 0.0]
 }
 
+[sub_resource type="Animation" id="Animation_0x07v"]
+resource_name = "take_damage"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AlpacoSprite:material:shader_parameter/hit_opacity")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_121lp"]
 _data = {
 "RESET": SubResource("Animation_ekia6"),
@@ -98,8 +97,6 @@ shape = SubResource("CapsuleShape2D_6ifpc")
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_p2no3")
 offset = Vector2(50, 0)
-
-[node name="HealthComponent" parent="." instance=ExtResource("4_3j1eu")]
 
 [node name="HealthLabel" type="Label" parent="."]
 offset_left = -16.0

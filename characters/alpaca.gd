@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+
 enum DIRECTION {LEFT, RIGHT}
 
 const MOVEMENT_SPEED = 100.0
@@ -21,15 +22,17 @@ var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
 var power: int = 0
 
+var health: int = 100
+
 
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
-@onready var health_component:HealthComponent = $HealthComponent
+@onready var game_state = $"/root/GameState"
 
 
 func _ready() -> void:
-	health_component.health_changed.connect(update_label)
-	update_label(health_component.health)
+	game_state.health_changed.connect(update_label)
+	update_label(health)
 
 func _physics_process(delta):
 
@@ -153,11 +156,7 @@ func open_inventory():
 func open_menu():
 	print("Se abrió la wea de menu")
 
-func take_damage(damage_amount: int):
-	health_component.take_damage(damage_amount)
-
-func heal(heal_amount: int):
-	health_component.heal(heal_amount)
-
 func update_label(new_health: int):
-	$HealthLabel.text = str(new_health)
+	health = new_health
+	$HealthLabel.text = str(health)
+
