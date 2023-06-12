@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://cvi16xw75htbq"]
+
+[ext_resource type="PackedScene" uid="uid://dub6inclj0qlq" path="res://levels/level_generator.tscn" id="1_c8y4a"]
+[ext_resource type="PackedScene" uid="uid://dqgh5ggiisb7i" path="res://characters/alpaca.tscn" id="2_jwufa"]
+[ext_resource type="PackedScene" uid="uid://i3fitbnq4tgd" path="res://ui/ui.tscn" id="3_5jrkq"]
+
+[node name="Game" type="Node2D"]
+
+[node name="LevelGenerator" parent="." instance=ExtResource("1_c8y4a")]
+
+[node name="Alpaca" parent="." instance=ExtResource("2_jwufa")]
+position = Vector2(176, 14)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("3_5jrkq")]
