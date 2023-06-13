@@ -35,8 +35,6 @@ func _ready() -> void:
 	# Same speed going up and down
 	floor_constant_speed = true
 
-
-func _ready() -> void:
 	health_component.health_changed.connect(update_label)
 	update_label(health_component.health)
 
