@@ -10,8 +10,8 @@ const FORWARD_JUMP_VELOCITY_Y = -250.0
 
 const IN_PLACE_JUMP_VELOCITY_Y = -300
 
-const FLIP_JUMP_VELOCITY_X = 50
-const FLIP_JUMP_VELOCITY_Y = -350
+const FLIP_JUMP_VELOCITY_X = 80
+const FLIP_JUMP_VELOCITY_Y = -400
 const AIM_SPRITE_DISTANCE = 50
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -21,9 +21,22 @@ var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
 var power: int = 0
 
+
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
+@onready var health_component:HealthComponent = $HealthComponent
 
+func _ready() -> void:
+
+	# Not sliding
+	floor_stop_on_slope = true
+	# Can walk slopes up to 85 deg
+	floor_max_angle = deg_to_rad(85)
+	# Same speed going up and down
+	floor_constant_speed = true
+
+	health_component.health_changed.connect(update_label)
+	update_label(health_component.health)
 
 func _physics_process(delta):
 
@@ -134,8 +147,9 @@ func use(throw_power: int) -> void:
 		throw_direction = throw_power * Vector2(-cos(angle), -sin(angle))
 
 	# throw the grenade
+	grenade_instance.position = self.position
 	grenade_instance.throw(throw_direction)
-	add_child(grenade_instance)
+	$"/root/Game".add_child(grenade_instance)
 
 	# give back the colision with parent after 0.25 secs
 	await get_tree().create_timer(0.25).timeout
@@ -146,3 +160,12 @@ func open_inventory():
 
 func open_menu():
 	print("Se abrió la wea de menu")
+
+func take_damage(damage_amount: int):
+	health_component.take_damage(damage_amount)
+
+func heal(heal_amount: int):
+	health_component.heal(heal_amount)
+
+func update_label(new_health: int):
+	$HealthLabel.text = str(new_health)

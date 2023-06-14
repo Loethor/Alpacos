@@ -5,13 +5,15 @@ extends RigidBody2D
 @onready var grenade_sprite: Sprite2D = $GrenadeSprite
 @onready var grenade_collider: CollisionShape2D = $CollisionShape2D
 
+var explosion_radius: int = 50
+
 func explode() -> void:
-	print("Explotó la wea")
+	SignalBus.has_exploded.emit(global_position, explosion_radius)
 	explosion_particles.emitting = true
 	grenade_sprite.visible = false
 	grenade_collider.disabled = true
+
 	await get_tree().create_timer(1).timeout
-	print("Se fue a la wea")
 	queue_free()
 
 func _on_explosion_timer_timeout() ->void:

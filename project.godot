@@ -13,11 +13,12 @@ config_version=5
 config/name="Alpacos"
 run/main_scene="res://game.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://alpaco_icon.svg"
 
 [autoload]
 
 GameState="*res://game_state.gd"
+SignalBus="*res://signal_bus.gd"
 
 [display]
 

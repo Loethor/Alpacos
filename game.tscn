@@ -6,10 +6,12 @@
 
 [node name="Game" type="Node2D"]
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" parent="CanvasLayer" instance=ExtResource("3_ewwyn")]
+mouse_filter = 2
+
 [node name="LevelGenerator" parent="." instance=ExtResource("1_0aq48")]
 
 [node name="Alpaca" parent="." instance=ExtResource("2_y2wg0")]
 position = Vector2(176, 14)
-
-[node name="Grenade" parent="." instance=ExtResource("3_g2gom")]
-position = Vector2(273, 18)
