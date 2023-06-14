@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dub6inclj0qlq" path="res://levels/level_generator.tscn" id="1_0aq48"]
 [ext_resource type="PackedScene" uid="uid://dqgh5ggiisb7i" path="res://characters/alpaca.tscn" id="2_y2wg0"]
-[ext_resource type="PackedScene" uid="uid://bhflo7kow7rck" path="res://items/grenade.tscn" id="3_g2gom"]
+[ext_resource type="PackedScene" uid="uid://i3fitbnq4tgd" path="res://ui/ui.tscn" id="3_ewwyn"]
 
 [node name="Game" type="Node2D"]
 

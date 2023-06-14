@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://d4a2k8nwtsl8e"]
-
-[ext_resource type="Script" path="res://signal_bus.gd" id="1_ipx3d"]
-
-[node name="SignalBus" type="Node"]
-script = ExtResource("1_ipx3d")
