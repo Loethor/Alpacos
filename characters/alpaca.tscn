@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqgh5ggiisb7i"]
+[gd_scene load_steps=6 format=3 uid="uid://dqgh5ggiisb7i"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
 [ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://assets/models/alpaco/pixelALPACO.png" id="2_gxxui"]
 [ext_resource type="Texture2D" uid="uid://bsu37uir6uqpq" path="res://assets/models/aim/aim.png" id="3_p2no3"]
+[ext_resource type="Script" path="res://Camera2D.gd" id="4_qsfdv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6ifpc"]
 radius = 13.0
@@ -23,3 +24,8 @@ shape = SubResource("CapsuleShape2D_6ifpc")
 scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_p2no3")
 offset = Vector2(50, 0)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+limit_smoothed = true
+position_smoothing_enabled = true
+script = ExtResource("4_qsfdv")

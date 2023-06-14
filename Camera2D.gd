@@ -1,12 +1,11 @@
 extends Camera2D
 
-
+const CAMERA_MOVEMENT_TIME:= 0.25
 @onready var target = $".."
 
-func _process(_delta) -> void:
-	self.position = target.get_node("Alpaca").position
-	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		var tween = create_tween()
-		tween.tween_property(self, "position", event.position, 0.5)
+		tween.tween_property(self, "global_position", event.position, CAMERA_MOVEMENT_TIME)
+	if event.is_action_pressed("center_camera"):
+		global_position = target.global_position
