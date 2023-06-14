@@ -1,37 +1,27 @@
-extends Node2D
+class_name LevelGenerator extends Node2D
 
 #@export var noise:FastNoiseLite
-@export var debug:bool = false
 @export var offset_scale:float = -0.2
 @export var height_scale:float = .5
 
-@onready var foreground_sprite:Sprite2D = $ForegroundSprite
-
-@onready var seed_label:Label = $Control/MarginContainer/VBoxContainer/SeedLabel
-@onready var offset_label:Label = $Control/MarginContainer/VBoxContainer/OffsetLabel
-@onready var height_label:Label = $Control/MarginContainer/VBoxContainer/HeightLabel
-@onready var octaves_label:Label = $Control/MarginContainer/VBoxContainer/OctavesLabel
-
-@onready var seed_hscroll:HScrollBar = $Control/MarginContainer2/VBoxContainer2/SeedHS
-@onready var octaves_hscroll:HScrollBar = $Control/MarginContainer2/VBoxContainer2/OctavesHS
-@onready var height_hscroll:HScrollBar = $Control/MarginContainer2/VBoxContainer2/HeightHS
-@onready var offset_hscroll:HScrollBar = $Control/MarginContainer2/VBoxContainer2/OffsetHS
+var foreground_sprite:Sprite2D
 
 
 var line := []
 var noise:FastNoiseLite = FastNoiseLite.new()
-var image: Image
+@onready var image: Image
+var bitmap_level: BitMap
+
+func _init(path_to_image: String) -> void:
+	image = load(path_to_image)
 
 func _ready() -> void:
 	randomize()
+	foreground_sprite = Sprite2D.new()
+	add_child(foreground_sprite)
 	_init_noise()
 	_generate_map()
 	SignalBus.has_exploded.connect(explode_on_terrain)
-
-	# Show UI in debug mode
-	if debug:
-		$Control.show()
-		_init_ui()
 
 func _init_noise():
 	noise.seed = randi()
@@ -41,7 +31,7 @@ func _init_noise():
 
 func _generate_map():
 	# TODO: select from a list of background images
-	image = load("res://assets/models/background/queixo.png")
+
 
 #	# We need that sweet transparent alpha
 	image.convert(Image.FORMAT_RGBA8)
@@ -102,7 +92,7 @@ func create_collision_based_on_image(im: Image) -> void:
 		$StaticBody2D.add_child(new_collider)
 
 func _obtain_collision_polygon(im: Image) -> Array[PackedVector2Array]:
-	var bitmap_level: BitMap = BitMap.new()
+
 	bitmap_level.create_from_image_alpha(im)
 	print(bitmap_level)
 
@@ -162,34 +152,3 @@ func explode_on_terrain(at_position: Vector2, explosion_radius: int) -> void:
 	foreground_sprite.texture.update(image)
 	# updating the collisions
 	create_collision_based_on_image(image)
-
-
-######## DEBUG MODE ONLY #######
-func _init_ui():
-	seed_label.text = "Seed: %s" % str(0)
-	offset_label.text = "Offset: %s" % str(offset_scale)
-	height_label.text = "Height: %s" % str(height_scale)
-	octaves_label.text = "Octaves: %s" % str(noise.fractal_octaves)
-
-func _on_seed_hs_value_changed(value: float) -> void:
-	seed_label.text = "Seed: %s" % str(value)
-	noise.seed = int(value)
-	_generate_map()
-
-func _on_offset_hs_value_changed(value: float) -> void:
-	offset_label.text = "Offset: %s" % str(value)
-	offset_scale = value
-	_generate_map()
-
-
-func _on_octaves_hs_value_changed(value: float) -> void:
-	octaves_label.text = "Octaves: %s" % str(value)
-	noise.fractal_octaves = int(value)
-	_generate_map()
-
-
-func _on_height_hs_value_changed(value: float) -> void:
-	height_label.text = "Height: %s" % str(value)
-	height_scale = value
-	_generate_map()
-
