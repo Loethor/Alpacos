@@ -1,3 +1,4 @@
+@icon("res://assets/models/icons/health_component.svg")
 class_name HealthComponent
 extends Node
 

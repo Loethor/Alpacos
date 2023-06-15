@@ -3,6 +3,7 @@ extends Node
 signal wind_changed(current_wind)
 
 const BASE_TURN_DURATION: float = 30
+
 var wind_strenght: Array[int] = [-2, -1, 0, 1, 2]
 var prev_wind_id: int = 0
 

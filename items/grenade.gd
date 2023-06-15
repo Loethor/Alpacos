@@ -8,7 +8,7 @@ extends RigidBody2D
 var explosion_radius: int = 50
 
 func explode() -> void:
-	SignalBus.has_exploded.emit(global_position, explosion_radius)
+	$ExplosionComponent.explode(global_position)
 	explosion_particles.emitting = true
 	grenade_sprite.visible = false
 	grenade_collider.disabled = true

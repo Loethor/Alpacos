@@ -62,7 +62,6 @@ func obtain_normaliced_noise(x_position:int) -> float:
 
 func _create_collision_based_on_image(im: Image) -> void:
 	var polygons: Array[PackedVector2Array] = _obtain_collision_polygon(im)
-	print(polygons.size())
 
 	# if the terrain is divided in multiple pieces, we need a collision
 	# for each piece, and a polygon for each collider
