@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://by3sacr4vsd2r"]
+
+[ext_resource type="Script" path="res://characters/follow_camera.gd" id="1_cj4hh"]
+
+[node name="FollowCamera" type="Camera2D"]
+position = Vector2(176, 14)
+limit_smoothed = true
+position_smoothing_enabled = true
+script = ExtResource("1_cj4hh")
