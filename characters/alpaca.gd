@@ -61,6 +61,7 @@ func _physics_process(delta):
 			if previous_facing_direction != facing_direction:
 				# Angle must be mirrowed in x-axis
 				aim_sprite.rotation_degrees -= 2*aim_sprite.rotation_degrees
+				SignalBus.aim_changed.emit(aim_sprite.rotation_degrees)
 
 			# Update velocity
 			velocity.x = direction * MOVEMENT_SPEED
@@ -105,6 +106,7 @@ func _physics_process(delta):
 			DIRECTION.LEFT:
 				new_rotation += aim_direction
 		aim_sprite.rotation_degrees = clamp(new_rotation, -90, 90)
+		SignalBus.aim_changed.emit(aim_sprite.rotation_degrees)
 
 	# Handle menu.
 	if Input.is_action_just_pressed("menu"):
@@ -115,19 +117,18 @@ func _physics_process(delta):
 	# e.g., shotgun should just "shoot" and not hold and release
 	# Holding  use.
 	if Input.is_action_pressed("use"):
-		if power < 1000:
-			power += 50
+		SignalBus.throw_power_increased.emit()
 
 	# Releasing use.
 	if Input.is_action_just_released("use"):
-		use(power)
+		use()
 		power = 0
 
 	move_and_slide()
 
 # this works temporary and only for grenade
 # TODO make this work for any kind of weapon
-func use(throw_power: int) -> void:
+func use() -> void:
 
 	# Selected weapon scene
 	var grenade_scene: PackedScene = preload("res://items/grenade.tscn")
