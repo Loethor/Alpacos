@@ -45,12 +45,12 @@ freeze = true
 script = ExtResource("1_vob7k")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("2_u7eip")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_wihmu")
-disabled = true
 
 [node name="ExplosionTimer" type="Timer" parent="."]
 wait_time = 2.0

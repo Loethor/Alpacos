@@ -20,17 +20,18 @@ const THROW_POWER_LIMIT := 1000
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+# Player properties
 var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
 var throw_power: int = 0
-
 var aim_angle: float = 0.0
 
+# Related to the selected weapon
 var has_weapon_selected: bool = false
 var SelectedWeaponScene: PackedScene
 var selected_weapon_instance
-@onready var selected_weapon_sprite := Sprite2D.new()
 
+@onready var selected_weapon_sprite := Sprite2D.new()
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
 @onready var health_component:HealthComponent = $HealthComponent
@@ -47,18 +48,8 @@ func _ready() -> void:
 	health_component.health_changed.connect(update_label)
 	update_label(health_component.health)
 
+	_init_selected_weapon()
 
-	var GrenadeScene: PackedScene = load("res://items/grenade.tscn")
-	SelectedWeaponScene = GrenadeScene
-	selected_weapon_instance = SelectedWeaponScene.instantiate()
-	selected_weapon_sprite.texture = selected_weapon_instance.get_child(0).texture
-	selected_weapon_sprite.offset.x = -20
-	selected_weapon_sprite.flip_v = true # why the fuck is this needed?
-
-	has_weapon_selected = true
-	selected_weapon_instance.add_collision_exception_with(self)
-	add_child(selected_weapon_sprite)
-	add_child(selected_weapon_instance)
 
 func _physics_process(delta):
 
@@ -78,12 +69,15 @@ func _physics_process(delta):
 
 			# Update facing direction
 			facing_direction = DIRECTION.RIGHT if direction == 1.0 else DIRECTION.LEFT
+			SignalBus.facing_direction_changed.emit(direction)
 
 			# Adjust aim rotation if direction has changed
 			if previous_facing_direction != facing_direction:
 				# Angle must be mirrowed in x-axis
 				aim_sprite.rotation_degrees -= 2*aim_sprite.rotation_degrees
-				SignalBus.aim_changed.emit(aim_sprite.rotation_degrees)
+
+				# Update any component that uses rotation
+				SignalBus.aim_changed.emit(aim_sprite.rotation)
 				if has_weapon_selected:
 					selected_weapon_sprite.rotation_degrees -= 2*selected_weapon_sprite.rotation_degrees
 
@@ -121,6 +115,7 @@ func _physics_process(delta):
 
 		# Handle Aim.
 		aim_sprite.offset.x = AIM_SPRITE_DISTANCE if facing_direction == DIRECTION.RIGHT else -AIM_SPRITE_DISTANCE
+		# Update selected weapon sprite
 		if has_weapon_selected:
 			selected_weapon_sprite.offset.x = 20 if facing_direction == DIRECTION.RIGHT else -20
 
@@ -134,20 +129,17 @@ func _physics_process(delta):
 			DIRECTION.LEFT:
 				new_rotation -= aim_direction
 		aim_sprite.rotation_degrees = clamp(new_rotation, -90, 90)
-		SignalBus.aim_changed.emit(aim_sprite.rotation_degrees)
+		# Update all aim users
+		SignalBus.aim_changed.emit(aim_sprite.rotation)
 		if has_weapon_selected:
 			selected_weapon_sprite.rotation_degrees = aim_sprite.rotation_degrees + 180
-
 
 	# Handle menu.
 	if Input.is_action_just_pressed("menu"):
 		open_menu()
 
-	# TODO this is a temporal solution
-	# in the future depending on the weapong we don't want this behavior
-	# e.g., shotgun should just "shoot" and not hold and release
-	# Holding  use.
 	if has_weapon_selected:
+		# TODO only working for grenade
 		if Input.is_action_pressed("use"):
 			if throw_power < THROW_POWER_LIMIT:
 				throw_power += THROW_POWER_INCREASE
@@ -160,49 +152,15 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-# this works temporary and only for grenade
-# TODO make this work for any kind of weapon
 func use() -> void:
 
-
-#	selected_weapon_instance.position = self.position
 	selected_weapon_instance.use()
 	has_weapon_selected = false
 	selected_weapon_sprite.queue_free()
 
-#	await get_tree().create_timer(0.25).timeout
-#	selected_weapon_instance.remove_collision_exception_with(self)
-
 	# restart select weapons
 	selected_weapon_instance = null
-
 	selected_weapon_sprite = Sprite2D.new()
-
-#	# Selected weapon scene
-#	var grenade_scene: PackedScene = preload("res://items/grenade.tscn")
-#	var grenade_instance := grenade_scene.instantiate()
-#
-#	# make it not collide initially with the parent
-#	grenade_instance.add_collision_exception_with(self)
-#
-#	# throw angle
-#	var angle: float = aim_sprite.rotation
-#
-#	# because of dirty angle hack, we have to manage directions here too
-#	var throw_direction: Vector2 = Vector2.ZERO
-#	if facing_direction == DIRECTION.RIGHT:
-#		throw_direction = throw_power * Vector2(cos(angle), sin(angle))
-#	else:
-#		throw_direction = throw_power * Vector2(-cos(angle), -sin(angle))
-#
-#	# throw the grenade
-#	grenade_instance.position = self.position
-#	grenade_instance.throw(throw_direction)
-#	$"/root/Game".add_child(grenade_instance)
-#
-#	# give back the colision with parent after 0.25 secs
-#	await get_tree().create_timer(0.25).timeout
-#	grenade_instance.remove_collision_exception_with(self)
 
 func open_inventory():
 	print("Se abrió la wea de inventario")
@@ -218,3 +176,17 @@ func heal(heal_amount: int):
 
 func update_label(new_health: int):
 	$HealthLabel.text = str(new_health)
+
+func _init_selected_weapon() -> void:
+	var GrenadeScene: PackedScene = load("res://items/grenade.tscn")
+	SelectedWeaponScene = GrenadeScene
+	has_weapon_selected = true
+	selected_weapon_instance = SelectedWeaponScene.instantiate()
+	selected_weapon_instance.add_collision_exception_with(self)
+
+	selected_weapon_sprite.texture = selected_weapon_instance.get_child(0).texture
+	selected_weapon_sprite.offset.x = -20
+	selected_weapon_sprite.flip_v = true # why the fuck is this needed?
+
+	add_child(selected_weapon_sprite)
+	add_child(selected_weapon_instance)

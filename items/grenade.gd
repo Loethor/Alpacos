@@ -8,9 +8,14 @@ extends RigidBody2D
 var explosion_radius: int = 50
 
 var facing_direction: int
+var throw_angle_radians: float
+var throw_power: int
+
+var parent:Node2D
 
 func _ready() -> void:
-	SignalBus.facing_direction_changed.connect(set_facing_direction)
+	parent = $".."
+	_update_throw_properties()
 
 func _on_explosion_timer_timeout() ->void:
 	explode()
@@ -28,30 +33,39 @@ func explode() -> void:
 
 func use() -> void:
 
+	# Update grenade properties
+	_update_throw_properties()
 
+	# Start the timer
 	$ExplosionTimer.start()
 
-	var throw_angle: float = $AimComponent.aim_angle
-	var throw_power: int = $ChargedComponent.throw_power
+	# Adjust sprite
+	$Sprite2D.flip_h = true
+	$Sprite2D.show()
 
-	var impulse: Vector2 = _calculate_impulse(throw_angle, throw_power)
+	# Calculate the impulse
+	var impulse: Vector2 = _calculate_impulse()
 
-	print(throw_angle)
-	print(throw_power)
-	print(impulse)
+	# Start to apply physics
 	freeze = false
 	apply_impulse(impulse)
 
-
-
-
+	# Reset throw power
 	$ChargedComponent.throw_power = 0
 
-func _calculate_impulse(throw_angle: float, throw_power: int) -> Vector2:
-	if facing_direction == 1:
-		return throw_power * Vector2(cos(throw_angle), sin(throw_angle))
-	else:
-		return throw_power * Vector2(-cos(throw_angle), -sin(throw_angle))
+	await get_tree().create_timer(0.25).timeout
+	remove_collision_exception_with(parent)
 
-func set_facing_direction(new_facing_direction: int):
-	facing_direction = new_facing_direction
+func _calculate_impulse() -> Vector2:
+	# Because of how the angles are defined, we need to use the
+	# facing direction of the father
+
+	return parent.facing_direction * \
+		   throw_power * \
+		   Vector2(cos(throw_angle_radians), sin(throw_angle_radians))
+
+
+func _update_throw_properties() -> void:
+	throw_angle_radians = $AimComponent.aim_angle_radians
+	throw_power = $ChargedComponent.throw_power
+	$Sprite2D.rotation = throw_angle_radians
