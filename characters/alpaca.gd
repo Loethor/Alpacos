@@ -90,9 +90,11 @@ func _physics_process(delta):
 			# no input, velocity set to 0
 			velocity.x = 0
 
-
 		# Handle forward jump.
 		if Input.is_action_just_pressed("forward_jump"):
+			# TODO try with move towards 0 at the movement else
+			# and velocity x = 0 here, with move and slide
+			# and then the velocity adjustments
 			velocity.y = FORWARD_JUMP_VELOCITY_Y
 			velocity.x = FORWARD_JUMP_VELOCITY_X if facing_direction == DIRECTION.RIGHT else -FORWARD_JUMP_VELOCITY_X
 			move_and_slide()

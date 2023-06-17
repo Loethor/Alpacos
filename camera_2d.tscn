@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://by3sacr4vsd2r"]
-
-[ext_resource type="Script" path="res://Camera2D.gd" id="1_lusbe"]
-
-[node name="Camera2D" type="Camera2D"]
-position = Vector2(176, 14)
-limit_smoothed = true
-position_smoothing_enabled = true
-script = ExtResource("1_lusbe")

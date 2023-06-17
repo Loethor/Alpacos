@@ -21,9 +21,7 @@ func _on_explosion_timer_timeout() ->void:
 	explode()
 
 func explode() -> void:
-	SignalBus.has_exploded.emit(global_position, explosion_radius)
-
-	# Handle emission and hidings
+	$ExplosionComponent.explode(global_position)
 	explosion_particles.emitting = true
 	grenade_sprite.visible = false
 	grenade_collider.disabled = true
