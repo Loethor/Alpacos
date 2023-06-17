@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://g2nytkfr78y6"]
 
-[ext_resource type="Script" path="res://levels/demo_level.gd" id="1_xyasb"]
+[ext_resource type="PackedScene" uid="uid://dqgh5ggiisb7i" path="res://characters/alpaca.tscn" id="2_kiasp"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_s3gwa"]
 size = Vector2(640, 20)
@@ -47,3 +47,6 @@ mesh = SubResource("QuadMesh_8n2o4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Column2/StaticBody2D"]
 shape = SubResource("RectangleShape2D_43esr")
+
+[node name="Alpaca" parent="." instance=ExtResource("2_kiasp")]
+position = Vector2(522, 418)

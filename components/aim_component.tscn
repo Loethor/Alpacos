@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1aj2c0w51beb"]
+
+[ext_resource type="Script" path="res://components/aim_component.gd" id="1_ifjl6"]
+
+[node name="AimComponent" type="Node"]
+script = ExtResource("1_ifjl6")
