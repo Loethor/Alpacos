@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dqgh5ggiisb7i"]
+[gd_scene load_steps=13 format=3 uid="uid://dqgh5ggiisb7i"]
 
 [ext_resource type="Script" path="res://characters/alpaca.gd" id="1_sbrnt"]
 [ext_resource type="Texture2D" uid="uid://dlhe73sm04vww" path="res://assets/models/alpaco/pixelALPACO.png" id="2_gxxui"]
@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://bsu37uir6uqpq" path="res://assets/models/aim/aim.png" id="3_p2no3"]
 [ext_resource type="PackedScene" uid="uid://fmxcyodo1b8h" path="res://components/health_component.tscn" id="4_3j1eu"]
 [ext_resource type="Theme" uid="uid://crqrod4xxs28d" path="res://assets/themes/alpaco_theme.tres" id="5_2xhpv"]
-[ext_resource type="Texture2D" uid="uid://b8vnx8g28srjq" path="res://assets/models/box/box.png" id="7_0s3bu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6lley"]
 shader = ExtResource("2_w57ao")
@@ -116,9 +115,3 @@ vertical_alignment = 1
 libraries = {
 "": SubResource("AnimationLibrary_121lp")
 }
-
-[node name="Node2D" type="Node2D" parent="."]
-
-[node name="Sprite2D" type="Sprite2D" parent="Node2D"]
-texture = ExtResource("7_0s3bu")
-offset = Vector2(50, 0)

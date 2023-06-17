@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-enum DIRECTION {LEFT, RIGHT}
+enum DIRECTION {LEFT = -1, RIGHT = 1}
 
 const MOVEMENT_SPEED = 100.0
 const AIR_FRICTION = 1.0
@@ -14,13 +14,22 @@ const FLIP_JUMP_VELOCITY_X = 80
 const FLIP_JUMP_VELOCITY_Y = -400
 const AIM_SPRITE_DISTANCE = 50
 
+const THROW_POWER_INCREASE := 50
+const THROW_POWER_LIMIT := 1000
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 var previous_facing_direction: DIRECTION = DIRECTION.LEFT
 var facing_direction: DIRECTION = DIRECTION.LEFT
-var power: int = 0
+var throw_power: int = 0
 
+var aim_angle: float = 0.0
+
+var has_weapon_selected: bool = false
+var SelectedWeaponScene: PackedScene
+var selected_weapon_instance
+@onready var selected_weapon_sprite := Sprite2D.new()
 
 @onready var alpaco_sprite:Sprite2D = $AlpacoSprite
 @onready var aim_sprite:Sprite2D = $AimSprite
@@ -37,6 +46,19 @@ func _ready() -> void:
 
 	health_component.health_changed.connect(update_label)
 	update_label(health_component.health)
+
+
+	var GrenadeScene: PackedScene = load("res://items/grenade.tscn")
+	SelectedWeaponScene = GrenadeScene
+	selected_weapon_instance = SelectedWeaponScene.instantiate()
+	selected_weapon_sprite.texture = selected_weapon_instance.get_child(0).texture
+	selected_weapon_sprite.offset.x = -20
+	selected_weapon_sprite.flip_v = true # why the fuck is this needed?
+
+	has_weapon_selected = true
+	selected_weapon_instance.add_collision_exception_with(self)
+	add_child(selected_weapon_sprite)
+	add_child(selected_weapon_instance)
 
 func _physics_process(delta):
 
@@ -62,6 +84,8 @@ func _physics_process(delta):
 				# Angle must be mirrowed in x-axis
 				aim_sprite.rotation_degrees -= 2*aim_sprite.rotation_degrees
 				SignalBus.aim_changed.emit(aim_sprite.rotation_degrees)
+				if has_weapon_selected:
+					selected_weapon_sprite.rotation_degrees -= 2*selected_weapon_sprite.rotation_degrees
 
 			# Update velocity
 			velocity.x = direction * MOVEMENT_SPEED
@@ -97,16 +121,23 @@ func _physics_process(delta):
 
 		# Handle Aim.
 		aim_sprite.offset.x = AIM_SPRITE_DISTANCE if facing_direction == DIRECTION.RIGHT else -AIM_SPRITE_DISTANCE
-		var aim_direction = Input.get_axis("aim_down", "aim_up")
+		if has_weapon_selected:
+			selected_weapon_sprite.offset.x = 20 if facing_direction == DIRECTION.RIGHT else -20
+
+		# Value is -1 if aiming up, 1 if aiming down
+		var aim_direction = Input.get_axis("aim_up", "aim_down")
 		var new_rotation = aim_sprite.rotation_degrees
 
 		match facing_direction:
 			DIRECTION.RIGHT:
-				new_rotation -= aim_direction
-			DIRECTION.LEFT:
 				new_rotation += aim_direction
+			DIRECTION.LEFT:
+				new_rotation -= aim_direction
 		aim_sprite.rotation_degrees = clamp(new_rotation, -90, 90)
 		SignalBus.aim_changed.emit(aim_sprite.rotation_degrees)
+		if has_weapon_selected:
+			selected_weapon_sprite.rotation_degrees = aim_sprite.rotation_degrees + 180
+
 
 	# Handle menu.
 	if Input.is_action_just_pressed("menu"):
@@ -116,13 +147,16 @@ func _physics_process(delta):
 	# in the future depending on the weapong we don't want this behavior
 	# e.g., shotgun should just "shoot" and not hold and release
 	# Holding  use.
-	if Input.is_action_pressed("use"):
-		SignalBus.throw_power_increased.emit()
+	if has_weapon_selected:
+		if Input.is_action_pressed("use"):
+			if throw_power < THROW_POWER_LIMIT:
+				throw_power += THROW_POWER_INCREASE
+			SignalBus.throw_power_increased.emit(throw_power)
 
-	# Releasing use.
-	if Input.is_action_just_released("use"):
-		use()
-		power = 0
+		# Releasing use.
+		if Input.is_action_just_released("use"):
+			use()
+			throw_power = 0
 
 	move_and_slide()
 
@@ -130,31 +164,45 @@ func _physics_process(delta):
 # TODO make this work for any kind of weapon
 func use() -> void:
 
-	# Selected weapon scene
-	var grenade_scene: PackedScene = preload("res://items/grenade.tscn")
-	var grenade_instance := grenade_scene.instantiate()
 
-	# make it not collide initially with the parent
-	grenade_instance.add_collision_exception_with(self)
+#	selected_weapon_instance.position = self.position
+	selected_weapon_instance.use()
+	has_weapon_selected = false
+	selected_weapon_sprite.queue_free()
 
-	# throw angle
-	var angle: float = aim_sprite.rotation
+#	await get_tree().create_timer(0.25).timeout
+#	selected_weapon_instance.remove_collision_exception_with(self)
 
-	# because of dirty angle hack, we have to manage directions here too
-	var throw_direction: Vector2 = Vector2.ZERO
-	if facing_direction == DIRECTION.RIGHT:
-		throw_direction = throw_power * Vector2(cos(angle), sin(angle))
-	else:
-		throw_direction = throw_power * Vector2(-cos(angle), -sin(angle))
+	# restart select weapons
+	selected_weapon_instance = null
 
-	# throw the grenade
-	grenade_instance.position = self.position
-	grenade_instance.throw(throw_direction)
-	$"/root/Game".add_child(grenade_instance)
+	selected_weapon_sprite = Sprite2D.new()
 
-	# give back the colision with parent after 0.25 secs
-	await get_tree().create_timer(0.25).timeout
-	grenade_instance.remove_collision_exception_with(self)
+#	# Selected weapon scene
+#	var grenade_scene: PackedScene = preload("res://items/grenade.tscn")
+#	var grenade_instance := grenade_scene.instantiate()
+#
+#	# make it not collide initially with the parent
+#	grenade_instance.add_collision_exception_with(self)
+#
+#	# throw angle
+#	var angle: float = aim_sprite.rotation
+#
+#	# because of dirty angle hack, we have to manage directions here too
+#	var throw_direction: Vector2 = Vector2.ZERO
+#	if facing_direction == DIRECTION.RIGHT:
+#		throw_direction = throw_power * Vector2(cos(angle), sin(angle))
+#	else:
+#		throw_direction = throw_power * Vector2(-cos(angle), -sin(angle))
+#
+#	# throw the grenade
+#	grenade_instance.position = self.position
+#	grenade_instance.throw(throw_direction)
+#	$"/root/Game".add_child(grenade_instance)
+#
+#	# give back the colision with parent after 0.25 secs
+#	await get_tree().create_timer(0.25).timeout
+#	grenade_instance.remove_collision_exception_with(self)
 
 func open_inventory():
 	print("Se abrió la wea de inventario")

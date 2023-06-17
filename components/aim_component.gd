@@ -2,7 +2,7 @@
 class_name AimComponent extends Node
 
 var aim_angle: float
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	SignalBus.aim_changed.connect(update_angle)
 

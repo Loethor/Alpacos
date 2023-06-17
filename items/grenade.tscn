@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://items/grenade.gd" id="1_vob7k"]
 [ext_resource type="Texture2D" uid="uid://dwf16hp4e7oj" path="res://assets/models/grenade/grenade.png" id="2_u7eip"]
-[ext_resource type="PackedScene" uid="uid://c1aj2c0w51beb" path="res://aim_component.tscn" id="3_g4mh7"]
+[ext_resource type="PackedScene" uid="uid://c1aj2c0w51beb" path="res://components/aim_component.tscn" id="3_g4mh7"]
 [ext_resource type="PackedScene" uid="uid://cllx3eqbs7x8k" path="res://components/charged_component.tscn" id="4_3vecc"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_s060p"]
@@ -41,19 +41,20 @@ turbulence_noise_strength = 12.16
 
 [node name="Grenade" type="RigidBody2D"]
 physics_material_override = SubResource("PhysicsMaterial_s060p")
+freeze = true
 script = ExtResource("1_vob7k")
 
-[node name="GrenadeSprite" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_u7eip")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_wihmu")
+disabled = true
 
 [node name="ExplosionTimer" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
-autostart = true
 
 [node name="ExplosionParticles" type="GPUParticles2D" parent="."]
 position = Vector2(0.561234, 0.561234)
