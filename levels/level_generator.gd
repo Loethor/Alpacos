@@ -20,12 +20,6 @@ func _ready() -> void:
 	_generate_map()
 	SignalBus.has_exploded.connect(explode_on_terrain)
 	spawn_points = obtain_spawn_points()
-	for point in spawn_points:
-		var new_sprite := Sprite2D.new()
-		var texture = load("res://assets/models/icons/aim.svg")
-		new_sprite.texture = texture
-		new_sprite.global_position = point
-		add_child(new_sprite)
 
 func _init_noise():
 	noise.seed = randi()
@@ -145,9 +139,7 @@ func obtain_spawn_points() -> Array[Vector2]:
 	var size: Vector2i = bitmap_level.get_size()
 	var _spawn_points:Array[Vector2] = []
 	for i in range(0, size.x, MINIMUM_SPACE_BETWEEN_SPAWN_POINTS):
-		for j in range(ALPACO_MIDDLE_POINT, size.y, ALPACO_MIDDLE_POINT):
-			if bitmap_level.get_bit(i,j) and !bitmap_level.get_bit(i, j - ALPACO_MIDDLE_POINT):
+		for j in range(1, size.y, 1):
+			if bitmap_level.get_bit(i,j) and !bitmap_level.get_bit(i, j - 1):
 				_spawn_points.append(Vector2(i,j - ALPACO_MIDDLE_POINT))
-
-
 	return _spawn_points
