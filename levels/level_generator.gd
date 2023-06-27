@@ -1,5 +1,8 @@
 extends Node2D
 
+const MINIMUM_SPACE_BETWEEN_SPAWN_POINTS = 64
+const ALPACO_MIDDLE_POINT = 32
+
 @export var offset_scale:float = -0.2
 @export var height_scale:float = .5
 
@@ -7,12 +10,16 @@ extends Node2D
 
 var noise:FastNoiseLite = FastNoiseLite.new()
 var image: Image
+var bitmap_level := BitMap.new()
+
+var spawn_points: Array[Vector2]
 
 func _ready() -> void:
 	randomize()
 	_init_noise()
 	_generate_map()
 	SignalBus.has_exploded.connect(explode_on_terrain)
+	spawn_points = obtain_spawn_points()
 
 func _init_noise():
 	noise.seed = randi()
@@ -69,7 +76,6 @@ func _create_collision_based_on_image(im: Image) -> void:
 	_create_new_colliders(polygons)
 
 func _obtain_collision_polygon(im: Image) -> Array[PackedVector2Array]:
-	var bitmap_level := BitMap.new()
 	bitmap_level.create_from_image_alpha(im)
 
 	var polygons: Array[PackedVector2Array] = bitmap_level.opaque_to_polygons(
@@ -128,3 +134,12 @@ func explode_on_terrain(at_position: Vector2, explosion_radius: int) -> void:
 	foreground_sprite.texture.update(image)
 	# updating the collisions
 	_create_collision_based_on_image(image)
+
+func obtain_spawn_points() -> Array[Vector2]:
+	var size: Vector2i = bitmap_level.get_size()
+	var _spawn_points:Array[Vector2] = []
+	for i in range(0, size.x, MINIMUM_SPACE_BETWEEN_SPAWN_POINTS):
+		for j in range(1, size.y, 1):
+			if bitmap_level.get_bit(i,j) and !bitmap_level.get_bit(i, j - 1):
+				_spawn_points.append(Vector2(i,j - ALPACO_MIDDLE_POINT))
+	return _spawn_points
